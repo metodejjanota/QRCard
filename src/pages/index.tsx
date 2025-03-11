@@ -1,14 +1,9 @@
-import { Button } from "@chakra-ui/react";
+import Image from "next/image";
 
 export default function Home() {
 	return (
-		<div>
-			<h1>Travel Ready</h1>
-			<p>
-				Welcome to Travel Ready! This is a travel app that helps you plan your
-				trips.
-			</p>
-			<Button colorScheme="blue">Get Started</Button>
+		<div className="flex flex-col items-center gap-8 h-[75vh] justify-center">
+			<Image src="/map.svg" width={700} height={500} alt="Map" />
 		</div>
 	);
 }

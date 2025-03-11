@@ -1,56 +1,29 @@
 {
-  "name": "nextjs-tailwind-ionic-capacitor-starter",
-  "version": "5.0.0",
+  "name": "travelready",
+  "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=18.17"
-  },
   "scripts": {
-    "compile": "tsc",
-    "compile:watch": "tsc -w",
+    "dev": "next dev --turbopack",
     "build": "next build",
-    "dev": "next dev",
-    "lint": "eslint . --ext .ts,.tsx",
-    "prettify": "prettier --write **/*.tsx",
-    "preserve": "npm run build",
-    "serve": "npx serve out",
-    "presync": "npm run build",
-    "sync": "npx cap sync",
-    "android": "npx cap run android",
-    "ios": "npx cap run ios"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@capacitor/android": "5.7.2",
-    "@capacitor/core": "5.7.2",
-    "@capacitor/ios": "5.7.2",
-    "@capacitor/status-bar": "5.0.7",
-    "@ionic/react": "7.7.4",
-    "@ionic/react-router": "7.7.4",
-    "classnames": "2.5.1",
-    "next": "14.2.24",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router": "5.3.4",
-    "react-router-dom": "5.3.4",
-    "react-virtuoso": "4.7.1"
+    "@capacitor/core": "^7.0.1",
+    "next": "15.2.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "7.0.1",
-    "@types/jest": "29.5.12",
-    "@types/node": "20.11.25",
-    "@types/react": "18.2.64",
-    "@types/react-dom": "18.2.21",
-    "@types/react-router": "5.1.20",
-    "@types/react-router-dom": "5.3.3",
-    "autoprefixer": "10.4.18",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.1.3",
-    "ionicons": "7.2.2",
-    "postcss": "8.4.35",
-    "prettier": "3.2.5",
-    "pullstate": "1.25",
-    "reselect": "5.1.0",
-    "tailwindcss": "3.4.1",
-    "typescript": "5.4.2"
+    "@capacitor/cli": "^7.0.1",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

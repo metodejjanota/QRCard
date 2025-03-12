@@ -1,16 +1,18 @@
 import { NavTop, NavBottom } from "./nav";
 import { ReactNode } from "react";
+import { useAuth } from "@/lib/authHook";
 
 interface LayoutProps {
 	children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+	const { loading, isAuthenticated } = useAuth();
 	return (
 		<div className="container max-w-md mx-auto">
-			<NavTop />
+			{!loading && isAuthenticated && <NavTop />}
 			<main>{children}</main>
-			<NavBottom />
+			{!loading && isAuthenticated && <NavBottom />}
 		</div>
 	);
 };

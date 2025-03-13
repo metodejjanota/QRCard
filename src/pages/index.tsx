@@ -16,15 +16,9 @@ export default function Home() {
 			<div className="flex flex-col gap-4">
 				<button
 					className="btn btn-primary w-full"
-					onClick={() => router.push("/auth/login")}
+					onClick={() => router.push("/auth")}
 				>
-					Login
-				</button>
-				<button
-					className="btn btn-outline w-full"
-					onClick={() => router.push("/auth/register")}
-				>
-					Register
+					Start planning your trip!
 				</button>
 			</div>
 		</div>

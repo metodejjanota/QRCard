@@ -1,10 +1,8 @@
 import React from "react";
 import { BellIcon } from "lucide-react";
 import { useRouter } from "next/router";
-import { useAuth } from "@/lib/authHook";
 
 const NavTop = () => {
-	const { loading, isAuthenticated } = useAuth();
 	return (
 		<div className=" w-full h-30 flex justify-around items-center">
 			<div className="w-full h-full flex justify-between items-center">
@@ -14,11 +12,10 @@ const NavTop = () => {
 						This is a travel app that helps you plan your trips.
 					</p>
 				</div>
-				{!loading && isAuthenticated && (
-					<div>
-						<BellIcon size={24} />
-					</div>
-				)}
+
+				<div>
+					<BellIcon size={24} />
+				</div>
 			</div>
 		</div>
 	);

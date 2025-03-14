@@ -18,7 +18,6 @@ const Login = () => {
 		if (error) {
 			console.error(error);
 		}
-		router.push("/protected/test");
 	}
 
 	async function signUp() {

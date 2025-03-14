@@ -4,7 +4,11 @@ import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 
 export default function PrivatePage({ user }: { user: User }) {
-	return <h1>Hello, {user.email || "user"}!</h1>;
+	return (
+		<div>
+			<h1>Hello, {user.email || "user"}!</h1>);
+		</div>
+	);
 }
 
 PrivatePage.getInitialProps = async (context: NextPageContext) => {

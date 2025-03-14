@@ -4,17 +4,19 @@ import { useRouter } from "next/router";
 
 const NavTop = () => {
 	return (
-		<div className=" w-full h-30 flex justify-around items-center">
-			<div className="w-full h-full flex justify-between items-center">
-				<div>
-					<h1 className="text-2xl font-black">Wellcome to Travel Ready</h1>
-					<p className="text-sm">
-						This is a travel app that helps you plan your trips.
-					</p>
-				</div>
+		<div className="w-full h-20 fixed bg-amber-500 top-0 left-0 items-center">
+			<div className="container ">
+				<div className="w-full h-full flex justify-between items-center">
+					<div>
+						<h1 className="text-2xl font-black"></h1>
+						<p className="text-sm">
+							This is a travel app that helps you plan your trips.
+						</p>
+					</div>
 
-				<div>
-					<BellIcon size={24} />
+					<div>
+						<BellIcon size={24} />
+					</div>
 				</div>
 			</div>
 		</div>

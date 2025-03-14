@@ -6,8 +6,8 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
 	return (
-		<div className="container max-w-lg mx-auto">
-			<main>{children}</main>
+		<div className="container max-w-xs mx-auto">
+			<main className="mt-12">{children}</main>
 		</div>
 	);
 };

@@ -30,10 +30,16 @@ const Login = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-8 h-screen justify-center">
-			<Image src="/login.svg" width={700} height={500} alt="Map" />
-			<form className="flex flex-col gap-1">
-				<h1 className="text-2xl font-black">Wellcome to Travel Ready</h1>
+		<div className="flex flex-col gap-8 h-screen ">
+			<Image
+				src="/login.svg"
+				width={250}
+				height={250}
+				alt="Map"
+				className="mx-auto"
+			/>
+			<form className="flex flex-col gap-0">
+				<h1 className="text-2xl font-black">Wellcome to QRCard</h1>
 				<fieldset className="fieldset w-full">
 					<legend className="fieldset-legend">Email address</legend>
 					<input
@@ -55,7 +61,7 @@ const Login = () => {
 					<p className="fieldset-label">We will never share your password.</p>
 				</fieldset>
 
-				<div>
+				<div className="flex flex-col gap-2">
 					<button
 						className="btn btn-primary w-full mt-6"
 						onClick={e => {
@@ -66,7 +72,7 @@ const Login = () => {
 						Login
 					</button>
 					<button
-						className="btn btn-outline w-full mt-6"
+						className="btn btn-outline w-full"
 						onClick={e => {
 							e.preventDefault();
 							signUp();

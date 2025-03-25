@@ -1,5 +1,5 @@
 import React from "react";
-import { BellIcon, LogOutIcon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/component";
 import { useRouter } from "next/router";
 

@@ -1,7 +1,24 @@
 import React from "react";
-import { BellIcon } from "lucide-react";
+import { BellIcon, LogOutIcon } from "lucide-react";
+import { createClient } from "@/lib/supabase/component";
+import { useRouter } from "next/router";
 
 const NavTop = () => {
+	const router = useRouter();
+
+	async function logout() {
+		const supabase = createClient();
+
+		const { error } = await supabase.auth.signOut();
+
+		if (error) {
+			console.error(error);
+			return;
+		}
+
+		router.push("/auth");
+	}
+
 	return (
 		<div className="w-full h-20 fixed bg-accent top-0 left-0 items-center">
 			<div className="max-w-xs mx-auto h-full">
@@ -10,8 +27,8 @@ const NavTop = () => {
 						<h1 className="text-2xl font-black">QRCard</h1>
 					</div>
 
-					<div>
-						<BellIcon size={24} strokeWidth={3} />
+					<div className="flex gap-4">
+						<LogOutIcon size={24} strokeWidth={3} onClick={() => logout()} />
 					</div>
 				</div>
 			</div>

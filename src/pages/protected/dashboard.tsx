@@ -19,7 +19,7 @@ export default function PrivatePage({ user }: { user: User }) {
 					<span
 						onClick={() => {
 							if (typeof window !== "undefined") {
-								window.location.pathname = "/protected/edit";
+								window.location.pathname = "/protected/edit-card";
 							}
 						}}
 						className="text-accent cursor-pointer"

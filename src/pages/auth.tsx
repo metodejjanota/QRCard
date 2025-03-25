@@ -9,16 +9,36 @@ const Login = () => {
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function logIn() {
-		const { error } = await supabase.auth.signInWithPassword({
-			email,
-			password,
-		});
-		if (error) {
-			console.error(error);
+		setIsLoading(true);
+
+		if (!email || !password) {
+			return;
 		}
-		router.push("/protected/test");
+
+		if (!email.includes("@")) {
+			return;
+		}
+
+		try {
+			const { data, error } = await supabase.auth.signInWithPassword({
+				email,
+				password,
+			});
+
+			if (error) throw error;
+
+			if (data.user) {
+				router.push("/protected/dashboard");
+			}
+		} catch (error) {
+			console.error(error);
+			// Optionally show error to user
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
 	async function signUp() {
@@ -26,7 +46,8 @@ const Login = () => {
 		if (error) {
 			console.error(error);
 		}
-		router.push("/");
+
+		logIn();
 	}
 
 	return (
@@ -68,8 +89,9 @@ const Login = () => {
 							e.preventDefault();
 							logIn();
 						}}
+						disabled={isLoading}
 					>
-						Login
+						{isLoading ? "Logging in..." : "Login"}
 					</button>
 					<button
 						className="btn btn-outline w-full"

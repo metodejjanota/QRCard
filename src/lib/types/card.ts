@@ -1,14 +1,16 @@
 interface ICard {
 	_id: string;
-	companyLogo?: string;
-	copmanyName: string;
-	copmanyPosition?: string;
-	description?: string;
+	/* personal */
 	firstName: string;
 	lastName: string;
-	website?: string;
 	phone?: string;
 	email?: string;
+	/* company */
+	companyLogo?: string;
+	companyName: string;
+	companyPosition?: string;
+	companyWebsite?: string;
+	companyDescription?: string;
 }
 
 export type { ICard };

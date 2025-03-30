@@ -1,6 +1,6 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import { HeroUIProvider } from "@heroui/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+
 export default function Document() {
 	return (
 		<Html lang="en" className="light">

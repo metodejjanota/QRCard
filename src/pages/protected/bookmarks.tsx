@@ -1,37 +1,41 @@
 const testData = [
 	{
 		_id: "1",
-		companyLogo: "/images/company1.png",
-		copmanyName: "TechCorp",
-		copmanyPosition: "Software Engineer",
-		description: "Innovative tech solutions provider.",
 		firstName: "John",
 		lastName: "Doe",
-		website: "https://techcorp.com",
-		phone: "123-456-7890",
-		email: "john.doe@techcorp.com",
+		companyName: "Tech Corp",
+		companyPosition: "Software Engineer",
+		companyDescription:
+			"Leading tech company specializing in software development.",
+		companyLogo: "/images/company-logo.png",
 	},
 	{
 		_id: "2",
-		companyLogo: "/images/company2.png",
-		copmanyName: "HealthPlus",
-		copmanyPosition: "Product Manager",
-		description: "Healthcare services and products.",
 		firstName: "Jane",
 		lastName: "Smith",
-		website: "https://healthplus.com",
-		phone: "987-654-3210",
-		email: "jane.smith@healthplus.com",
+		companyName: "Design Studio",
+		companyPosition: "Graphic Designer",
+		companyDescription:
+			"Creative design studio focused on branding and marketing.",
 	},
 	{
 		_id: "3",
-		companyLogo: "/images/company3.png",
-		copmanyName: "EduWorld",
-		description: "Educational resources for all ages.",
 		firstName: "Alice",
 		lastName: "Johnson",
-		website: "https://eduworld.com",
-		email: "alice.johnson@eduworld.com",
+		companyName: "Marketing Agency",
+		companyPosition: "Marketing Manager",
+		companyDescription:
+			"Agency providing innovative marketing solutions for businesses.",
+	},
+	{
+		_id: "4",
+		firstName: "Bob",
+		lastName: "Brown",
+		companyName: "Finance Group",
+		companyPosition: "Financial Analyst",
+		companyDescription:
+			"Finance group offering investment and financial advisory services.",
+		companyLogo: "/images/company-logo.png",
 	},
 ];
 
@@ -64,37 +68,36 @@ const Bookmarks = () => {
 		<div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{bookmarksList.map(bookmark => (
-					    <Card className="p-2">
-							<CardBody className="flex flex-row gap-4">
-								<Image
-									alt="Card Logo"
-									className="object-cover rounded-xl aspect-square"
-									src={bookmark.companyLogo}
-									width={150}
-									height={150}
-								/>
-								<div className="flex flex-col justify-center">
+					<Card className="p-2">
+						<CardBody className="flex flex-row gap-4">
+							<Image
+								alt="Card Logo"
+								className="object-cover rounded-xl aspect-square"
+								src={bookmark.companyLogo || "/images/default-logo.png"}
+								width={150}
+								height={150}
+							/>
+							<div className="flex flex-col justify-center">
 								<p className="text-tiny uppercase font-bold">
-									{bookmark.copmanyName}
+									{bookmark.companyName}
 								</p>
 								<small className="text-default-500">
-									{bookmark.copmanyPosition}
+									{bookmark.companyPosition}
 								</small>
 								<h4 className="font-bold text-large">
 									{bookmark.firstName} {bookmark.lastName}
 								</h4>
-								<p className="text-default-500 text-tiny">{bookmark.description}</p>
-					
-								</div>
-							</CardBody>
-							<CardFooter className="flex justify-between absolute bottom-0 left-0 right-0 p-2">
-								
-								<Button isIconOnly onClick={() => deleteBookmark(bookmark._id)}>
-									<Trash2Icon size={16} />
-								</Button>
-							</CardFooter>
-							
-						</Card>
+								<p className="text-default-500 text-tiny">
+									{bookmark.companyDescription}
+								</p>
+							</div>
+						</CardBody>
+						<CardFooter className="flex justify-between absolute bottom-0 left-0 right-0 p-2">
+							<Button isIconOnly onClick={() => deleteBookmark(bookmark._id)}>
+								<Trash2Icon size={16} />
+							</Button>
+						</CardFooter>
+					</Card>
 				))}
 			</div>
 		</div>

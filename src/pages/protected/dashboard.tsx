@@ -6,13 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { Share } from "@capacitor/share";
 import { ICard } from "@/lib/types/card";
 
-export default function PrivatePage({
-	user,
-	card,
-}: {
-	user: User;
-	card: ICard;
-}) {
+export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 	const { Canvas } = useQRCode();
 	const [qrUrl, setQrUrl] = useState<string | null>(
 		"localhost:3000/card/" + card.id
@@ -89,24 +83,38 @@ export default function PrivatePage({
 						Welcome to your private page. You are logged in.
 					</p>
 				</div>
-				<p className="text-sm opacity-70">
-					To share your QRCard,{" "}
-					<span
-						onClick={() => {
-							share();
-						}}
-						className="text-accent cursor-pointer"
-						style={{ textDecoration: "underline" }}
-					>
-						click here
-					</span>
-				</p>
+				<div className="flex flex-col gap-2">
+					<p className="text-sm opacity-70">
+						To share your QRCard,{" "}
+						<span
+							onClick={() => {
+								share();
+							}}
+							className="text-accent cursor-pointer"
+							style={{ textDecoration: "underline" }}
+						>
+							click here
+						</span>
+					</p>
+					<p className="text-sm opacity-70">
+						You can check your card{" "}
+						<span
+							onClick={() => {
+								window.location.href = "/card/" + card.id;
+							}}
+							className="text-accent cursor-pointer"
+							style={{ textDecoration: "underline" }}
+						>
+							here
+						</span>
+					</p>
+				</div>
 			</div>
 		</div>
 	);
 }
 
-PrivatePage.getInitialProps = async (context: NextPageContext) => {
+Dashboard.getInitialProps = async (context: NextPageContext) => {
 	const supabase = createClient(context);
 
 	const { data: userData, error: userError } = await supabase.auth.getUser();

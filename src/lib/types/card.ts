@@ -6,7 +6,7 @@ interface ICard {
 	phone?: string;
 	email?: string;
 	/* company */
-	companyLogo?: string;
+	companyLogo?: string | File;
 	companyName: string;
 	companyPosition?: string;
 	companyWebsite?: string;

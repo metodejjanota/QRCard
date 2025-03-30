@@ -1,63 +1,29 @@
-const testData = [
-	{
-		id: "1",
-		firstName: "John",
-		lastName: "Doe",
-		companyName: "Tech Corp",
-		companyPosition: "Software Engineer",
-		companyDescription:
-			"Leading tech company specializing in software development.",
-		companyLogo:
-			"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/LEGO_logo.svg/768px-LEGO_logo.svg.png",
-	},
-	{
-		id: "2",
-		firstName: "Jane",
-		lastName: "Smith",
-		companyName: "Design Studio",
-		companyPosition: "Graphic Designer",
-		companyDescription:
-			"Creative design studio focused on branding and marketing.",
-	},
-	{
-		id: "3",
-		firstName: "Alice",
-		lastName: "Johnson",
-		companyName: "Marketing Agency",
-		companyPosition: "Marketing Manager",
-		companyDescription:
-			"Agency providing innovative marketing solutions for businesses.",
-	},
-	{
-		id: "4",
-		firstName: "Bob",
-		lastName: "Brown",
-		companyName: "Finance Group",
-		companyPosition: "Financial Analyst",
-		companyDescription:
-			"Finance group offering investment and financial advisory services.",
-		companyLogo:
-			"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/LEGO_logo.svg/768px-LEGO_logo.svg.png",
-	},
-];
-
-import { ICard } from "@/lib/types/card";
-import { Trash2Icon } from "lucide-react";
+import type { User } from "@supabase/supabase-js";
+import type { NextPageContext } from "next";
+import { createClient } from "@/lib/supabase/server-props";
 import { useState } from "react";
+import { Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Card, CardBody, CardFooter } from "@heroui/card";
-import { Button } from "@heroui/react";
-import { useQRCode } from "next-qrcode";
 
-const Bookmarks = () => {
+export default function Bookmarks({
+	user,
+	bookmarks,
+}: {
+	user: User;
+	bookmarks: any[];
+}) {
 	const router = useRouter();
-	const { Canvas } = useQRCode();
-	const [bookmarksList, setBookmarksList] = useState<ICard[]>(testData);
+	const [bookmarksList, setBookmarksList] = useState(bookmarks);
+	const supabase = createClient();
 
-	const deleteBookmark = (id: string) => {
-		setBookmarksList(prev => prev.filter(bookmark => bookmark.id !== id));
-		// + odstrani bookmark i z db
+	const deleteBookmark = async (id: string) => {
+		const { error } = await supabase.from("bookmarks").delete().eq("id", id);
+		if (error) {
+			console.error("Error deleting bookmark:", error);
+		} else {
+			setBookmarksList(prev => prev.filter(bookmark => bookmark.id !== id));
+		}
 	};
 
 	const openBookmark = (id: string) => {
@@ -66,64 +32,83 @@ const Bookmarks = () => {
 
 	return (
 		<div>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{bookmarksList.map(bookmark => {
-					return (
-						<Card className="p-2 cursor-pointer relative" key={bookmark.id}>
-							<CardBody
-								className="flex flex-row gap-4"
-								onClick={() => openBookmark(bookmark.id)}
-							>
-								{bookmark.companyLogo === "" ||
-								bookmark.companyLogo === undefined ? (
-									<Canvas
-										text={"localhost:3000/card/" + bookmark.id}
-										options={{
-											errorCorrectionLevel: "L",
-											margin: 0,
-											scale: 6,
-											width: 100,
-											color: {
-												dark: "#000000",
-												light: "#ffffff00",
-											},
-										}}
-									/>
-								) : (
-									<Image
-										alt="Card Logo"
-										className="object-cover rounded-xl aspect-square"
-										src={bookmark.companyLogo}
-										width={100}
-										height={100}
-									/>
-								)}
-								<div className="flex flex-col justify-center">
-									<p className="text-tiny uppercase font-bold">
-										{bookmark.companyName}
-									</p>
-									<small className="text-default-500">
-										{bookmark.companyPosition}
-									</small>
-									<h4 className="font-bold text-large">
-										{bookmark.firstName} {bookmark.lastName}
-									</h4>
-									<p className="text-default-500 text-tiny">
-										{bookmark.companyDescription}
-									</p>
-								</div>
-							</CardBody>
-							<CardFooter className="flex justify-between absolute bottom-0 left-0 right-0 p-2">
-								<Button isIconOnly onClick={() => deleteBookmark(bookmark.id)}>
-									<Trash2Icon size={16} />
-								</Button>
-							</CardFooter>
-						</Card>
-					);
-				})}
-			</div>
+			{bookmarksList.length === 0 ? (
+				<div className="text-center text-gray-500">You have no bookmarks.</div>
+			) : (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{bookmarksList.map(bookmark => (
+						<div
+							key={bookmark.id}
+							className="card bg-base-100 card-sm shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out p-4 rounded-lg flex flex-row gap-4 cursor-pointer"
+							onClick={() => openBookmark(bookmark.cards.id)}
+						>
+							<div className="absolute top-2 right-2 cursor-pointer m-2">
+								<Trash2Icon
+									size={20}
+									strokeWidth={2}
+									className="opacity-70 cursor-pointer"
+									onClick={e => {
+										e.stopPropagation();
+										deleteBookmark(bookmark.id);
+									}}
+								/>
+							</div>
+							<Image
+								src={bookmark.cards.companyLogo || "/images/default.png"}
+								alt={bookmark.cards.companyName}
+								width={100}
+								height={100}
+								className="rounded-lg"
+							/>
+							<div className="flex flex-col gap-2 mt-4 items-start">
+								<h2>{bookmark.cards.companyName}</h2>
+								<p>{bookmark.cards.description}</p>
+								<a
+									href={bookmark.cards.website}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Visit Website
+								</a>
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
-};
+}
 
-export default Bookmarks;
+Bookmarks.getInitialProps = async (context: NextPageContext) => {
+	const supabase = createClient(context);
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError || !user) {
+		if (context.res) {
+			context.res.writeHead(302, { Location: "/" });
+			context.res.end();
+		} else {
+			document.location.pathname = "/";
+		}
+		return { user: null, bookmarks: [] };
+	}
+
+	const { data: bookmarks, error: bookmarksError } = await supabase
+		.from("bookmarks")
+		.select("cards(*)")
+		.eq("user_id", user.id);
+
+	if (bookmarksError) {
+		console.error("Error fetching bookmarks:", bookmarksError);
+	}
+
+	console.log("Bookmarks:", bookmarks);
+
+	return {
+		user,
+		bookmarks: bookmarks || [],
+	};
+};

@@ -29,7 +29,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 		const supabase = createClient();
 		const { data, error } = await supabase.storage
 			.from("logos")
-			.upload(`cards/${file.name}`, file, {
+			.upload(`cards/${Date.now()}_${file.name}`, file, {
 				cacheControl: "3600",
 				upsert: false,
 			});
@@ -39,8 +39,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 			return null;
 		}
 
-		return supabase.storage.from("logos").getPublicUrl(data.path).data
-			.publicUrl;
+		return supabase.storage.from("logos").getPublicUrl(data.path).data.publicUrl;
 	};
 
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -50,7 +49,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 		try {
 			let logoUrl = cardState.companyLogo;
 
-			if (logoUrl instanceof File) {
+			if (logoUrl && logoUrl instanceof File) {
 				const uploadedUrl = await uploadLogo(logoUrl);
 				if (!uploadedUrl) {
 					alert("Failed to upload logo. Please try again.");
@@ -62,7 +61,10 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 			const supabase = createClient();
 			const { error } = await supabase
 				.from("cards")
-				.update(cardState)
+				.update({
+					...cardState,
+					companyLogo: logoUrl,
+				})
 				.eq("user_id", user.id);
 
 			if (error) {

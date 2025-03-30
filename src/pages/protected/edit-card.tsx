@@ -13,7 +13,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 		email: card.email,
 		phone: card.phone,
 		/* company */
-		companyLogo: "",
+		companyLogo: card.companyLogo,
 		companyName: card.companyName,
 		companyPosition: card.companyPosition,
 		companyWebsite: card.companyWebsite,
@@ -49,7 +49,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 		try {
 			let logoUrl = cardState.companyLogo;
 
-			if (logoUrl && logoUrl instanceof File) {
+			if (logoUrl instanceof File) {
 				const uploadedUrl = await uploadLogo(logoUrl);
 				if (!uploadedUrl) {
 					alert("Failed to upload logo. Please try again.");

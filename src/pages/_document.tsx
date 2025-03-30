@@ -1,12 +1,15 @@
 import { Html, Head, Main, NextScript } from "next/document";
-
+import { HeroUIProvider } from "@heroui/react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 export default function Document() {
 	return (
-		<Html lang="en">
+		<Html lang="en" className="light">
 			<Head />
 			<body className="antialiased">
-				<Main />
-				<NextScript />
+				<HeroUIProvider>
+					<Main />
+					<NextScript />
+				</HeroUIProvider>
 			</body>
 		</Html>
 	);

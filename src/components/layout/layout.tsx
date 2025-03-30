@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
 			{router.pathname.includes("/protected/") ? (
 				<>
 					<NavTop />
-					<main className="mt-25">{children}</main>
+					<main className="mt-30">{children}</main>
 					<NavBottom />
 				</>
 			) : (

@@ -2,19 +2,16 @@ import type { User } from "@supabase/supabase-js";
 import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 import { useQRCode } from "next-qrcode";
-import { Button } from "@heroui/react";
 import { useState, useEffect, useRef } from "react";
 import { Share } from "@capacitor/share";
 import { ICard } from "@/lib/types/card";
 
 export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 	const { Canvas } = useQRCode();
-	const [qrUrl, setQrUrl] = useState<string | null>(
-		"localhost:3000/card/" + card.id
-	);
+	const qrUrl = "http://localhost:3000/card/" + card.id;
 	const canvasRef = useRef<HTMLDivElement>(null);
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
-	console.log("qrUrl", qrUrl);
+
 	useEffect(() => {
 		if (canvasRef.current) {
 			setTimeout(() => {
@@ -28,22 +25,12 @@ export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 
 	async function share() {
 		try {
-			if (qrDataUrl) {
-				await Share.share({
-					title: "My QRCard",
-					text: "Check out my QRCard!",
-					url: qrUrl || undefined,
-					dialogTitle: "Share with friends or save to device",
-					files: [qrDataUrl],
-				});
-			} else {
-				await Share.share({
-					title: "My QRCard",
-					text: "Check out my QRCard!",
-					url: qrUrl || undefined,
-					dialogTitle: "Share with friends or save to device",
-				});
-			}
+			await Share.share({
+				title: "My QRCard",
+				text: "Check out my QRCard!",
+				url: qrUrl,
+				dialogTitle: "Share with friends or save to device",
+			});
 		} catch (error) {
 			if (error instanceof Error && error.name === "AbortError") {
 				return;

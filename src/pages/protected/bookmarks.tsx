@@ -34,6 +34,7 @@ const testData = [
 		email: "alice.johnson@eduworld.com",
 	},
 ];
+
 import { ICard } from "@/lib/types/card";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";

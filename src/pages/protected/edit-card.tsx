@@ -1,35 +1,49 @@
 import { ICard } from "@/lib/types/card";
+import type { User } from "@supabase/supabase-js";
 import { useState } from "react";
 import { Form, Input, Button } from "@heroui/react";
+import type { NextPageContext } from "next";
+import { createClient } from "@/lib/supabase/server-props";
 
-const EditCard = () => {
-	const [card, setCard] = useState<ICard>({
-		id: "",
+export default function EditCard({ user, card }: { user: User; card: ICard }) {
+	const [cardState, setCardState] = useState<ICard>({
 		/* personal */
-		firstName: "",
-		lastName: "",
-		phone: "",
-		email: "",
+		firstName: card.firstName,
+		lastName: card.lastName,
+		email: card.email,
+		phone: card.phone,
 		/* company */
-		companyLogo: "",
-		companyName: "",
-		companyPosition: "",
-		companyWebsite: "",
-		companyDescription: "",
-		/* social */
-		facebook: "",
-		instagram: "",
-		linkedin: "",
+		companyLogo: card.companyLogo,
+		companyName: card.companyName,
+		companyPosition: card.companyPosition,
+		companyWebsite: card.companyWebsite,
+		companyDescription: card.companyDescription,
+		/* socials */
+		facebook: card.facebook,
+		instagram: card.instagram,
+		linkedin: card.linkedin,
 	});
 	const [loading, setLoading] = useState(false);
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		setLoading(true);
+
+		e.preventDefault();
 		try {
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			const supabase = createClient();
+			const { error } = await supabase
+				.from("cards")
+				.update(cardState)
+				.eq("user_id", user.id);
+
+			if (error) {
+				throw error;
+			}
+
 			alert("Card saved successfully!");
 		} catch (error) {
 			console.error("Error saving card:", error);
+			alert("Failed to save card. Please try again.");
 		} finally {
 			setLoading(false);
 		}
@@ -44,36 +58,42 @@ const EditCard = () => {
 				<div className="w-full h-full flex flex-col gap-2 z-0">
 					<h2 className="text-2xl font-bold">My Informations</h2>
 					<Input
-						required
 						description=""
 						label="First Name"
 						labelPlacement="inside"
 						type="text"
-						value={card.firstName}
-						onChange={e => setCard({ ...card, firstName: e.target.value })}
+						value={cardState.firstName}
+						onChange={e =>
+							setCardState({ ...cardState, firstName: e.target.value })
+						}
 						placeholder="First Name"
 						className="w-full"
 						disabled={loading}
 					/>
 					<Input
-						required
 						description=""
 						label="Last Name"
 						labelPlacement="inside"
 						type="text"
-						value={card.lastName}
-						onChange={e => setCard({ ...card, lastName: e.target.value })}
+						value={cardState.lastName}
+						onChange={e =>
+							setCardState({ ...cardState, lastName: e.target.value })
+						}
 						placeholder="Last Name"
 						className="w-full"
 						disabled={loading}
 					/>
 					<Input
+						isRequired
+						required
 						description=""
 						label="Email"
 						labelPlacement="inside"
 						type="email"
-						value={card.email}
-						onChange={e => setCard({ ...card, email: e.target.value })}
+						value={cardState.email}
+						onChange={e =>
+							setCardState({ ...cardState, email: e.target.value })
+						}
 						placeholder="Email"
 						className="w-full"
 						disabled={loading}
@@ -82,9 +102,11 @@ const EditCard = () => {
 						description=""
 						label="Phone"
 						labelPlacement="inside"
-						type="text"
-						value={card.phone}
-						onChange={e => setCard({ ...card, phone: e.target.value })}
+						type="tel"
+						value={cardState.phone}
+						onChange={e =>
+							setCardState({ ...cardState, phone: e.target.value })
+						}
 						placeholder="Phone"
 						className="w-full"
 						disabled={loading}
@@ -94,12 +116,13 @@ const EditCard = () => {
 					<h2 className="text-2xl font-bold">Company Informations</h2>
 					<Input
 						description=""
-						required
 						label="Company Name"
 						labelPlacement="inside"
 						type="text"
-						value={card.companyName}
-						onChange={e => setCard({ ...card, companyName: e.target.value })}
+						value={cardState.companyName}
+						onChange={e =>
+							setCardState({ ...cardState, companyName: e.target.value })
+						}
 						placeholder="Company Name"
 						className="w-full"
 						disabled={loading}
@@ -109,8 +132,10 @@ const EditCard = () => {
 						label="Company Logo"
 						labelPlacement="inside"
 						type="file"
-						value={card.companyLogo}
-						onChange={e => setCard({ ...card, companyLogo: e.target.value })}
+						value={cardState.companyLogo}
+						onChange={e =>
+							setCardState({ ...cardState, companyLogo: e.target.value })
+						}
 						placeholder="Company Logo URL"
 						className="w-full"
 						disabled={loading}
@@ -120,9 +145,9 @@ const EditCard = () => {
 						label="Company Position"
 						labelPlacement="inside"
 						type="text"
-						value={card.companyPosition}
+						value={cardState.companyPosition}
 						onChange={e =>
-							setCard({ ...card, companyPosition: e.target.value })
+							setCardState({ ...cardState, companyPosition: e.target.value })
 						}
 						placeholder="Company Position"
 						className="w-full"
@@ -132,9 +157,11 @@ const EditCard = () => {
 						description=""
 						label="Company Website"
 						labelPlacement="inside"
-						type="text"
-						value={card.companyWebsite}
-						onChange={e => setCard({ ...card, companyWebsite: e.target.value })}
+						type="url"
+						value={cardState.companyWebsite}
+						onChange={e =>
+							setCardState({ ...cardState, companyWebsite: e.target.value })
+						}
 						placeholder="Company Website"
 						className="w-full"
 						disabled={loading}
@@ -144,9 +171,9 @@ const EditCard = () => {
 						label="Company Description"
 						labelPlacement="inside"
 						type="text"
-						value={card.companyDescription}
+						value={cardState.companyDescription}
 						onChange={e =>
-							setCard({ ...card, companyDescription: e.target.value })
+							setCardState({ ...cardState, companyDescription: e.target.value })
 						}
 						placeholder="Company Description"
 						className="w-full"
@@ -159,10 +186,19 @@ const EditCard = () => {
 						description=""
 						label="Facebook"
 						labelPlacement="inside"
+						value={cardState.facebook}
+						onChange={e =>
+							setCardState({ ...cardState, facebook: e.target.value })
+						}
+						startContent={
+							<div className="pointer-events-none flex items-center">
+								<span className="text-default-400 text-small">
+									https://facebook.com/
+								</span>
+							</div>
+						}
 						type="text"
-						value={card.facebook}
-						onChange={e => setCard({ ...card, facebook: e.target.value })}
-						placeholder="Facebook"
+						placeholder="profile-name"
 						className="w-full"
 						disabled={loading}
 					/>
@@ -170,10 +206,19 @@ const EditCard = () => {
 						description=""
 						label="Instagram"
 						labelPlacement="inside"
+						value={cardState.instagram}
+						onChange={e =>
+							setCardState({ ...cardState, instagram: e.target.value })
+						}
+						startContent={
+							<div className="pointer-events-none flex items-center">
+								<span className="text-default-400 text-small">
+									https://instagram.com/
+								</span>
+							</div>
+						}
 						type="text"
-						value={card.instagram}
-						onChange={e => setCard({ ...card, instagram: e.target.value })}
-						placeholder="Instagram"
+						placeholder="profile-name"
 						className="w-full"
 						disabled={loading}
 					/>
@@ -181,50 +226,86 @@ const EditCard = () => {
 						description=""
 						label="LinkedIn"
 						labelPlacement="inside"
+						startContent={
+							<div className="pointer-events-none flex items-center">
+								<span className="text-default-400 text-small">
+									https://linkedin.com/in/
+								</span>
+							</div>
+						}
 						type="text"
-						value={card.linkedin}
-						onChange={e => setCard({ ...card, linkedin: e.target.value })}
-						placeholder="LinkedIn"
+						value={cardState.linkedin}
+						onChange={e =>
+							setCardState({ ...cardState, linkedin: e.target.value })
+						}
+						placeholder="profile-name"
 						className="w-full"
 						disabled={loading}
 					/>
 				</div>
 
-				<div className="w-full h-full flex gap-2">
-					<Button
-						variant="solid"
-						color="danger"
-						onClick={() => {
-							setCard({
-								id: "",
-								firstName: "",
-								lastName: "",
-								phone: "",
-								email: "",
-								companyLogo: "",
-								companyName: "",
-								companyPosition: "",
-								companyWebsite: "",
-								companyDescription: "",
-							});
-						}}
-						className="w-full"
-						disabled={loading}
-					>
-						Cancel
-					</Button>
-					<Button
-						color="primary"
-						type="submit"
-						className="w-full"
-						disabled={loading}
-					>
-						{loading ? "Saving..." : "Save"}
-					</Button>
-				</div>
+				<Button
+					color="primary"
+					type="submit"
+					className="w-full"
+					disabled={loading}
+				>
+					{loading ? "Saving..." : "Save"}
+				</Button>
 			</Form>
 		</div>
 	);
-};
+}
 
-export default EditCard;
+EditCard.getInitialProps = async (context: NextPageContext) => {
+	const supabase = createClient(context);
+
+	const { data: userData, error: userError } = await supabase.auth.getUser();
+	if (userError || !userData) {
+		if (context.res) {
+			context.res.writeHead(302, { Location: "/" });
+			context.res.end();
+		} else {
+			document.location.pathname = "/";
+		}
+		return { user: null };
+	}
+
+	const user = userData.user;
+
+	const { data: cardData, error: cardError } = await supabase
+		.from("cards")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
+	if (cardError || !cardData) {
+		const { data: newCard, error: createError } = await supabase
+			.from("cards")
+			.insert([
+				{
+					user_id: user.id,
+					email: user.email,
+				},
+			])
+			.select()
+			.single();
+
+		if (createError) {
+			console.error("Error creating card:", createError);
+			return {
+				user,
+			};
+		}
+
+		return {
+			user,
+			card: newCard,
+		};
+	}
+
+	return {
+		user,
+		card: cardData,
+	};
+};

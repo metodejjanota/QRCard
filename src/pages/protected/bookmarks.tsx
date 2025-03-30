@@ -105,8 +105,6 @@ Bookmarks.getInitialProps = async (context: NextPageContext) => {
 		console.error("Error fetching bookmarks:", bookmarksError);
 	}
 
-	console.log("Bookmarks:", bookmarks);
-
 	return {
 		user,
 		bookmarks: bookmarks || [],

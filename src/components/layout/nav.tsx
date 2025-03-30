@@ -17,7 +17,7 @@ const NavTop = () => {
 	}
 
 	return (
-		<div className="w-full h-20 fixed bg-accent top-0 left-0 items-center">
+		<div className="w-full h-20 fixed bg-accent top-0 left-0 items-center z-10">
 			<div className="max-w-xs mx-auto h-full">
 				<div className="w-full h-full flex justify-between items-center">
 					<div>
@@ -36,7 +36,7 @@ const NavBottom = () => {
 	const router = useRouter();
 
 	return (
-		<div className="fixed left-0 bottom-0 w-full h-30 flex justify-around items-center">
+		<div className="fixed left-0 bottom-0 w-full h-30 flex justify-around items-center z-10 bg-white border-t-2 shadow-lg">
 			<div className="h-full flex items-center justify-between gap-2">
 				<button
 					className={`btn btn-outline btn-lg ${

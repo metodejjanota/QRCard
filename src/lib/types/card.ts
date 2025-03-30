@@ -11,6 +11,10 @@ interface ICard {
 	companyPosition?: string;
 	companyWebsite?: string;
 	companyDescription?: string;
+	/* social */
+	facebook?: string;
+	instagram?: string;
+	linkedin?: string;
 }
 
 export type { ICard };

@@ -16,6 +16,10 @@ const EditCard = () => {
 		companyPosition: "",
 		companyWebsite: "",
 		companyDescription: "",
+		/* social */
+		facebook: "",
+		instagram: "",
+		linkedin: "",
 	});
 	const [loading, setLoading] = useState(false);
 
@@ -149,6 +153,43 @@ const EditCard = () => {
 						disabled={loading}
 					/>
 				</div>
+				<div className="w-full h-full flex flex-col gap-2">
+					<h2 className="text-2xl font-bold">Social Links</h2>
+					<Input
+						description=""
+						label="Facebook"
+						labelPlacement="inside"
+						type="text"
+						value={card.facebook}
+						onChange={e => setCard({ ...card, facebook: e.target.value })}
+						placeholder="Facebook"
+						className="w-full"
+						disabled={loading}
+					/>
+					<Input
+						description=""
+						label="Instagram"
+						labelPlacement="inside"
+						type="text"
+						value={card.instagram}
+						onChange={e => setCard({ ...card, instagram: e.target.value })}
+						placeholder="Instagram"
+						className="w-full"
+						disabled={loading}
+					/>
+					<Input
+						description=""
+						label="LinkedIn"
+						labelPlacement="inside"
+						type="text"
+						value={card.linkedin}
+						onChange={e => setCard({ ...card, linkedin: e.target.value })}
+						placeholder="LinkedIn"
+						className="w-full"
+						disabled={loading}
+					/>
+				</div>
+
 				<div className="w-full h-full flex gap-2">
 					<Button
 						variant="solid"

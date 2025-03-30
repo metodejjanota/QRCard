@@ -127,6 +127,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 						}
 						placeholder="Email"
 						className="w-full"
+						inputMode="email"
 						disabled={loading}
 					/>
 					<Input
@@ -140,6 +141,8 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 						}
 						placeholder="Phone"
 						className="w-full"
+						pattern="^\+?[0-9]*$"
+  						inputMode="tel"
 						disabled={loading}
 					/>
 				</div>

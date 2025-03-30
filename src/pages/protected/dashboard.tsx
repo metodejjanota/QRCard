@@ -61,7 +61,7 @@ export default function PrivatePage({ user }: { user: User }) {
 							errorCorrectionLevel: "L",
 							margin: 0,
 							scale: 6,
-							width: 250,
+							width: 350,
 							color: {
 								dark: "#000000",
 								light: "#ffffff00",

@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
 	const router = useRouter();
 	return (
-		<div className="container max-w-xs mx-auto">
+		<div className="container max-w-md mx-auto">
 			{router.pathname.includes("/protected/") ? (
 				<>
 					<NavTop />

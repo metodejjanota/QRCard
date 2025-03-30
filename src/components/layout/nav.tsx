@@ -37,7 +37,7 @@ const NavTop = () => {
 
 	return (
 		<div className="w-full fixed top-0 left-0 items-center z-10 bg-background border-b">
-			<div className="p-4 mx-6 mt-4">
+			<div className="p-4 mx-6">
 				<div className="max-w-md mx-auto h-full">
 					<div className="w-full h-full flex items-center justify-between">
 						<div>
@@ -58,7 +58,7 @@ const NavBottom = () => {
 
 	return (
 		<div className="fixed left-0 bottom-0 w-full flex justify-around items-center z-10 bg-background border-t">
-			<div className="p-4 mx-6 mb-4 w-full flex flex-row justify-evenly">
+			<div className="p-4 mx-6 w-full flex flex-row justify-evenly">
 				<Button
 					variant={`${
 						router.pathname === "/protected/bookmarks" ? "solid" : "light"

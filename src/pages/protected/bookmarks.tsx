@@ -34,7 +34,7 @@ export default function Bookmarks({ user, bookmarks }: { user: User; bookmarks: 
                         <div
                             key={bookmark.id}
                             className="card bg-base-100 card-sm shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out p-4 rounded-lg flex flex-row gap-4 cursor-pointer"
-                            onClick={() => openBookmark(bookmark.id)}
+                            onClick={() => openBookmark(bookmark.cards.id)}
                         >
                             <div className="absolute top-2 right-2 cursor-pointer m-2">
                                 <Trash2Icon
@@ -48,16 +48,16 @@ export default function Bookmarks({ user, bookmarks }: { user: User; bookmarks: 
                                 />
                             </div>
                             <Image
-                                src={bookmark.companyLogo || "/images/default.png"}
-                                alt={bookmark.companyName}
+                                src={bookmark.cards.companyLogo || "/images/default.png"}
+                                alt={bookmark.cards.companyName}
                                 width={100}
                                 height={100}
                                 className="rounded-lg"
                             />
                             <div className="flex flex-col gap-2 mt-4 items-start">
-                                <h2>{bookmark.companyName}</h2>
-                                <p>{bookmark.description}</p>
-                                <a href={bookmark.website} target="_blank" rel="noopener noreferrer">
+                                <h2>{bookmark.cards.companyName}</h2>
+                                <p>{bookmark.cards.description}</p>
+                                <a href={bookmark.cards.website} target="_blank" rel="noopener noreferrer">
                                     Visit Website
                                 </a>
                             </div>
@@ -85,12 +85,14 @@ Bookmarks.getInitialProps = async (context: NextPageContext) => {
 
     const { data: bookmarks, error: bookmarksError } = await supabase
         .from("bookmarks")
-        .select("*")
+        .select("cards(*)")
         .eq("user_id", user.id);
 
     if (bookmarksError) {
         console.error("Error fetching bookmarks:", bookmarksError);
     }
+
+    console.log("Bookmarks:", bookmarks);
 
     return {
         user,

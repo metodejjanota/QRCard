@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { App, URLOpenListenerEvent } from "@capacitor/app";
@@ -9,17 +8,24 @@ const AppUrlListener: React.FC = () => {
 
 	useEffect(() => {
 		const handleUrlOpen = (event: URLOpenListenerEvent) => {
-			const slug = event.url.split(".app").pop();
-			if (slug) {
-				router.push(slug);
+			try {
+				const url = new URL(event.url);
+				const path = url.pathname;
+
+				if (path && path !== "/") {
+					router.push(path);
+				}
+			} catch (error) {
+				console.error("Error parsing URL:", error);
 			}
 		};
 
-		App.addListener("appUrlOpen", handleUrlOpen).then(listener => {
-			return () => {
-				listener.remove();
-			};
-		});
+		const addListener = async () => {
+			const listener = await App.addListener("appUrlOpen", handleUrlOpen);
+			return () => listener.remove();
+		};
+
+		addListener();
 	}, [router]);
 
 	return null;

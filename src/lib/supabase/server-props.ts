@@ -1,30 +1,43 @@
 import { NextPageContext, type GetServerSidePropsContext } from "next";
-import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
+import {
+	createServerClient,
+	createBrowserClient,
+	serializeCookieHeader,
+} from "@supabase/ssr";
 
 export function createClient(context: NextPageContext) {
-	const { req, res } = context as unknown as GetServerSidePropsContext;
-	const supabase = createServerClient(
-		process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-		{
-			cookies: {
-				getAll() {
-					return Object.keys(req.cookies).map(name => ({
-						name,
-						value: req.cookies[name] || "",
-					}));
-				},
-				setAll(cookiesToSet) {
-					res.setHeader(
-						"Set-Cookie",
-						cookiesToSet.map(({ name, value, options }) =>
-							serializeCookieHeader(name, value, options)
-						)
-					);
-				},
-			},
-		}
-	);
+	if (typeof window === "undefined" && context && context.req && context.res) {
+		const { req, res } = context as unknown as GetServerSidePropsContext;
 
-	return supabase;
+		return createServerClient(
+			process.env.NEXT_PUBLIC_SUPABASE_URL!,
+			process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+			{
+				cookies: {
+					getAll() {
+						if (!req.cookies) return [];
+						return Object.keys(req.cookies).map(name => ({
+							name,
+							value: req.cookies[name] || "",
+						}));
+					},
+					setAll(cookiesToSet) {
+						if (res && res.setHeader) {
+							res.setHeader(
+								"Set-Cookie",
+								cookiesToSet.map(({ name, value, options }) =>
+									serializeCookieHeader(name, value, options)
+								)
+							);
+						}
+					},
+				},
+			}
+		);
+	} else {
+		return createBrowserClient(
+			process.env.NEXT_PUBLIC_SUPABASE_URL!,
+			process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+		);
+	}
 }

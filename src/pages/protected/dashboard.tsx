@@ -53,7 +53,7 @@ export default function PrivatePage({ user }: { user: User }) {
 
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
-			<div className="w-full h-full flex justify-center items-center aspect-square bg-accent rounded-2xl">
+			<div className="w-full h-full flex justify-center items-center aspect-square rounded-2xl">
 				<div ref={canvasRef}>
 					<Canvas
 						text={qrUrl || ""}

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/component";
+import { Form, Input, Button } from "@heroui/react";
 import Image from "next/image";
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
 
 	async function logIn() {
 		setIsLoading(true);
@@ -35,7 +37,11 @@ const Login = () => {
 			}
 		} catch (error) {
 			console.error(error);
-			// Optionally show error to user
+			if (error instanceof Error) {
+				setError(error.message);
+			} else {
+				setError("An unknown error occurred");
+			}
 		} finally {
 			setIsLoading(false);
 		}
@@ -59,51 +65,62 @@ const Login = () => {
 				alt="Map"
 				className="mx-auto"
 			/>
-			<form className="flex flex-col gap-0">
-				<h1 className="text-2xl font-black">Wellcome to QRCard</h1>
-				<fieldset className="fieldset w-full">
-					<legend className="fieldset-legend">Email address</legend>
-					<input
-						type="email"
-						className="input w-full"
-						placeholder="Enter your email address"
-						onChange={e => setEmail(e.target.value)}
-					/>
-					<p className="fieldset-label">We will never share your email.</p>
-				</fieldset>
-				<fieldset className="fieldset w-full">
-					<legend className="fieldset-legend">Password</legend>
-					<input
-						type="password"
-						className="input w-full"
-						placeholder="Enter your password"
-						onChange={e => setPassword(e.target.value)}
-					/>
-					<p className="fieldset-label">We will never share your password.</p>
-				</fieldset>
+			<Form className="flex flex-col gap-6">
+				<div>
+					<h1 className="text-2xl font-black">Wellcome to QRCard</h1>
 
-				<div className="flex flex-col gap-2">
-					<button
-						className="btn btn-primary w-full mt-6"
+					<p className="text-default-500">
+						Please log in to your account or create a new one.
+					</p>
+				</div>
+				<div className="flex flex-col gap-2 w-full">
+					<Input
+						label="Email"
+						type="email"
+						value={email}
+						onChange={e => setEmail(e.target.value)}
+						placeholder="Email"
+						className="w-full"
+						disabled={isLoading}
+					/>
+					<Input
+						label="Password"
+						type="password"
+						value={password}
+						onChange={e => setPassword(e.target.value)}
+						placeholder="Password"
+						className="w-full"
+						disabled={isLoading}
+					/>
+				</div>
+				<div className="flex gap-2 w-full">
+					<Button
+						type="submit"
+						className="w-full"
 						onClick={e => {
 							e.preventDefault();
 							logIn();
 						}}
 						disabled={isLoading}
 					>
-						{isLoading ? "Logging in..." : "Login"}
-					</button>
-					<button
-						className="btn btn-outline w-full"
+						{isLoading ? "Loading..." : "Log In"}
+					</Button>
+					<Button
+						type="button"
+						className="w-full"
 						onClick={e => {
 							e.preventDefault();
 							signUp();
 						}}
+						disabled={isLoading}
 					>
-						Register
-					</button>
+						{isLoading ? "Loading..." : "Create Account"}
+					</Button>
 				</div>
-			</form>
+				{error && (
+					<p className="text-red-500 text-sm text-center w-full">{error}</p>
+				)}
+			</Form>
 		</div>
 	);
 };

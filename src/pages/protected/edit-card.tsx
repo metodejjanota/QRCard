@@ -4,7 +4,7 @@ import { Form, Input, Button } from "@heroui/react";
 
 const EditCard = () => {
 	const [card, setCard] = useState<ICard>({
-		_id: "",
+		id: "",
 		/* personal */
 		firstName: "",
 		lastName: "",
@@ -196,7 +196,7 @@ const EditCard = () => {
 						color="danger"
 						onClick={() => {
 							setCard({
-								_id: "",
+								id: "",
 								firstName: "",
 								lastName: "",
 								phone: "",

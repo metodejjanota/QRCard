@@ -1,5 +1,5 @@
 interface ICard {
-	_id: string;
+	id: string;
 	/* personal */
 	firstName: string;
 	lastName: string;

@@ -4,15 +4,22 @@ import { createClient } from "@/lib/supabase/server-props";
 import { useQRCode } from "next-qrcode";
 import { useState, useEffect, useRef } from "react";
 import { Share } from "@capacitor/share";
+import { ICard } from "@/lib/types/card";
 
-export default function PrivatePage({ user }: { user: User }) {
+export default function PrivatePage({
+	user,
+	card,
+}: {
+	user: User;
+	card: ICard;
+}) {
 	const { Canvas } = useQRCode();
 	const [qrUrl, setQrUrl] = useState<string | null>(
-		"https://metodejjanota.space"
+		"localhost:3000/card/" + card.id
 	);
 	const canvasRef = useRef<HTMLDivElement>(null);
 	const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
-
+	console.log("qrUrl", qrUrl);
 	useEffect(() => {
 		if (canvasRef.current) {
 			setTimeout(() => {
@@ -103,8 +110,9 @@ export default function PrivatePage({ user }: { user: User }) {
 
 PrivatePage.getInitialProps = async (context: NextPageContext) => {
 	const supabase = createClient(context);
-	const { data, error } = await supabase.auth.getUser();
-	if (error || !data) {
+
+	const { data: userData, error: userError } = await supabase.auth.getUser();
+	if (userError || !userData) {
 		if (context.res) {
 			context.res.writeHead(302, { Location: "/" });
 			context.res.end();
@@ -113,7 +121,42 @@ PrivatePage.getInitialProps = async (context: NextPageContext) => {
 		}
 		return { user: null };
 	}
+
+	const user = userData.user;
+
+	const { data: cardData, error: cardError } = await supabase
+		.from("cards")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
+	if (cardError || !cardData) {
+		const { data: newCard, error: createError } = await supabase
+			.from("cards")
+			.insert([
+				{
+					user_id: user.id,
+					email: user.email,
+				},
+			])
+			.select()
+			.single();
+
+		if (createError) {
+			console.error("Error creating card:", createError);
+			return {
+				user,
+			};
+		}
+
+		return {
+			user,
+			card: newCard,
+		};
+	}
+
 	return {
-		user: data.user,
+		user,
+		card: cardData,
 	};
 };

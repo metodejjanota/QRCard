@@ -1,6 +1,6 @@
 const testData = [
 	{
-		_id: "1",
+		id: "1",
 		firstName: "John",
 		lastName: "Doe",
 		companyName: "Tech Corp",
@@ -11,7 +11,7 @@ const testData = [
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/LEGO_logo.svg/768px-LEGO_logo.svg.png",
 	},
 	{
-		_id: "2",
+		id: "2",
 		firstName: "Jane",
 		lastName: "Smith",
 		companyName: "Design Studio",
@@ -20,7 +20,7 @@ const testData = [
 			"Creative design studio focused on branding and marketing.",
 	},
 	{
-		_id: "3",
+		id: "3",
 		firstName: "Alice",
 		lastName: "Johnson",
 		companyName: "Marketing Agency",
@@ -29,7 +29,7 @@ const testData = [
 			"Agency providing innovative marketing solutions for businesses.",
 	},
 	{
-		_id: "4",
+		id: "4",
 		firstName: "Bob",
 		lastName: "Brown",
 		companyName: "Finance Group",
@@ -56,7 +56,7 @@ const Bookmarks = () => {
 	const [bookmarksList, setBookmarksList] = useState<ICard[]>(testData);
 
 	const deleteBookmark = (id: string) => {
-		setBookmarksList(prev => prev.filter(bookmark => bookmark._id !== id));
+		setBookmarksList(prev => prev.filter(bookmark => bookmark.id !== id));
 		// + odstrani bookmark i z db
 	};
 
@@ -69,15 +69,15 @@ const Bookmarks = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{bookmarksList.map(bookmark => {
 					return (
-						<Card className="p-2 cursor-pointer relative" key={bookmark._id}>
+						<Card className="p-2 cursor-pointer relative" key={bookmark.id}>
 							<CardBody
 								className="flex flex-row gap-4"
-								onClick={() => openBookmark(bookmark._id)}
+								onClick={() => openBookmark(bookmark.id)}
 							>
 								{bookmark.companyLogo === "" ||
 								bookmark.companyLogo === undefined ? (
 									<Canvas
-										text={"localhost:3000/card/" + bookmark._id}
+										text={"localhost:3000/card/" + bookmark.id}
 										options={{
 											errorCorrectionLevel: "L",
 											margin: 0,
@@ -114,7 +114,7 @@ const Bookmarks = () => {
 								</div>
 							</CardBody>
 							<CardFooter className="flex justify-between absolute bottom-0 left-0 right-0 p-2">
-								<Button isIconOnly onClick={() => deleteBookmark(bookmark._id)}>
+								<Button isIconOnly onClick={() => deleteBookmark(bookmark.id)}>
 									<Trash2Icon size={16} />
 								</Button>
 							</CardFooter>

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { LibraryBigIcon, EditIcon, HouseIcon } from "lucide-react";
 import { Button } from "@heroui/react";
+import Image from "next/image";
 
 const NavTop = () => {
 	const router = useRouter();
@@ -40,7 +41,14 @@ const NavTop = () => {
 			<div className="p-4 mx-6">
 				<div className="max-w-md mx-auto h-full">
 					<div className="w-full h-full flex items-center justify-between">
-						<div>
+						<div className="flex items-center gap-2">
+							<Image
+								src="/logo.png"
+								alt="Logo"
+								width={40}
+								height={40}
+								className="rounded-sm"
+							/>
 							<h1 className="text-2xl font-bold">{siteName}</h1>
 						</div>
 						<Button isIconOnly variant="solid" onClick={() => logout()}>

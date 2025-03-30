@@ -33,7 +33,7 @@ export default function Bookmarks({
 			const { error: deleteError } = await supabase
 				.from("bookmarks")
 				.delete()
-				.eq("id", id);
+				.eq("card_id", id);
 			if (deleteError) {
 				console.error("Error deleting bookmark:", deleteError);
 			}
@@ -80,7 +80,7 @@ export default function Bookmarks({
 								) : (
 									<Image
 										alt="Card Logo"
-										className="object-cover rounded-xl aspect-square"
+										className="object-cover rounded-xl aspect-square z-0"
 										src={
 											typeof bookmark.cards.companyLogo === "string"
 												? bookmark.cards.companyLogo
@@ -112,7 +112,7 @@ export default function Bookmarks({
 										bookmark.cards.id &&
 										deleteBookmark(bookmark.cards.id, event)
 									}
-									className="z-10"
+									className="z-0"
 								>
 									<Trash2Icon size={16} />
 								</Button>

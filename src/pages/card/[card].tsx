@@ -1,7 +1,7 @@
 import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 import { ICard } from "@/lib/types/card";
-import { Image } from "@heroui/react";
+import { Image, Skeleton } from "@heroui/react";
 
 export default function CardPage({
 	card,
@@ -16,16 +16,17 @@ export default function CardPage({
 
 	return (
 		<div>
-			<div className="flex justify-center items-center">
-				<Image
-					src={card.companyLogo}
-					alt="Company Logo"
-					fallbackSrc={<p className="text-red-500">Logo not found</p>}
-					width={500}
-					height={500}
-					className="rounded-full aspect-square object-cover"
-				/>
-			</div>
+			{card.companyLogo && (
+				<div className="flex justify-center items-center">
+					<Image
+						src={card.companyLogo}
+						alt="Company Logo"
+						width={100}
+						height={100}
+						className="rounded-full mb-4"
+					/>
+				</div>
+			)}
 			<div className="p-4">
 				<h2 className="text-xl font-semibold">Card ID: {card.id}</h2>
 				<p className="text-gray-700">Name: {card.email}</p>

@@ -1,6 +1,5 @@
 import type { User } from "@supabase/supabase-js";
 import type { NextPageContext } from "next";
-
 import { createClient } from "@/lib/supabase/server-props";
 import { useQRCode } from "next-qrcode";
 import { useState, useEffect, useRef } from "react";
@@ -70,9 +69,9 @@ export default function PrivatePage({ user }: { user: User }) {
 						logo={{
 							src: "/logo.png",
 							options: {
-								width: 55,
-								x: undefined,
-								y: undefined,
+								width: 50,
+								x: 25,
+								y: 275,
 							},
 						}}
 					/>
@@ -104,9 +103,7 @@ export default function PrivatePage({ user }: { user: User }) {
 
 PrivatePage.getInitialProps = async (context: NextPageContext) => {
 	const supabase = createClient(context);
-
 	const { data, error } = await supabase.auth.getUser();
-
 	if (error || !data) {
 		if (context.res) {
 			context.res.writeHead(302, { Location: "/" });
@@ -116,7 +113,6 @@ PrivatePage.getInitialProps = async (context: NextPageContext) => {
 		}
 		return { user: null };
 	}
-
 	return {
 		user: data.user,
 	};

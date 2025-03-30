@@ -13,7 +13,7 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 		email: card.email,
 		phone: card.phone,
 		/* company */
-		companyLogo: card.companyLogo,
+		companyLogo: "",
 		companyName: card.companyName,
 		companyPosition: card.companyPosition,
 		companyWebsite: card.companyWebsite,
@@ -25,11 +25,40 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 	});
 	const [loading, setLoading] = useState(false);
 
+	const uploadLogo = async (file: File) => {
+		const supabase = createClient();
+		const { data, error } = await supabase.storage
+			.from("logos")
+			.upload(`cards/${file.name}`, file, {
+				cacheControl: "3600",
+				upsert: false,
+			});
+
+		if (error) {
+			console.error("Error uploading file:", error);
+			return null;
+		}
+
+		return supabase.storage.from("logos").getPublicUrl(data.path).data
+			.publicUrl;
+	};
+
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		setLoading(true);
 
 		e.preventDefault();
 		try {
+			let logoUrl = cardState.companyLogo;
+
+			if (logoUrl instanceof File) {
+				const uploadedUrl = await uploadLogo(logoUrl);
+				if (!uploadedUrl) {
+					alert("Failed to upload logo. Please try again.");
+					return;
+				}
+				logoUrl = uploadedUrl;
+			}
+
 			const supabase = createClient();
 			const { error } = await supabase
 				.from("cards")
@@ -132,9 +161,11 @@ export default function EditCard({ user, card }: { user: User; card: ICard }) {
 						label="Company Logo"
 						labelPlacement="inside"
 						type="file"
-						value={cardState.companyLogo}
 						onChange={e =>
-							setCardState({ ...cardState, companyLogo: e.target.value })
+							setCardState({
+								...cardState,
+								companyLogo: e.target.files?.[0] || "",
+							})
 						}
 						placeholder="Company Logo URL"
 						className="w-full"

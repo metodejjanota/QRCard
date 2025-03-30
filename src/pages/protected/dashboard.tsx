@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 import { useQRCode } from "next-qrcode";
+import { Button } from "@heroui/react";
 import { useState, useEffect, useRef } from "react";
 import { Share } from "@capacitor/share";
 import { ICard } from "@/lib/types/card";
@@ -50,6 +51,17 @@ export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 			console.error("Error sharing:", error);
 		}
 	}
+
+	const handleDownloadQrCode = async () => {
+		if (qrDataUrl) {
+			const link = document.createElement("a");
+			link.href = qrDataUrl;
+			link.download = "qr-code.png";
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	};
 
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
@@ -102,6 +114,16 @@ export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 							onClick={() => {
 								window.location.href = "/card/" + card.id;
 							}}
+							className="text-accent cursor-pointer"
+							style={{ textDecoration: "underline" }}
+						>
+							here
+						</span>
+					</p>
+					<p className="text-sm opacity-70">
+						You can download your QRCard{" "}
+						<span
+							onClick={handleDownloadQrCode}
 							className="text-accent cursor-pointer"
 							style={{ textDecoration: "underline" }}
 						>

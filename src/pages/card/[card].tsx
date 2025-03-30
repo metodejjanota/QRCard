@@ -1,8 +1,14 @@
+import { useState, useEffect } from "react";
 import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 import { ICard } from "@/lib/types/card";
 import { Image, Skeleton, Button } from "@heroui/react";
-import { InstagramIcon, FacebookIcon, LinkedinIcon } from "lucide-react";
+import {
+	InstagramIcon,
+	FacebookIcon,
+	LinkedinIcon,
+	BookmarkIcon,
+} from "lucide-react";
 
 export default function CardPage({
 	card,
@@ -11,14 +17,51 @@ export default function CardPage({
 	card: ICard | null;
 	cardId: string | null;
 }) {
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (!card) {
+			setLoading(true);
+		} else {
+			setLoading(false);
+		}
+	}, [card]);
+
+	const handleBookmark = async () => {
+		const supabase = createClient();
+		const { data, error } = await supabase
+			.from("bookmarks")
+			.insert([{ card_id: cardId }])
+			.single();
+		if (error) {
+			console.error("Error bookmarking card:", error);
+			return;
+		}
+		console.log("Card bookmarked successfully:", data);
+	};
+
+	if (loading) {
+		return (
+			<div className="p-4">
+				<Skeleton className="h-24 w-24 rounded-full mb-4 mx-auto" />
+				<div className="flex flex-col gap-6">
+					<Skeleton className="h-8 w-3/4 mx-auto" />
+					<Skeleton className="h-6 w-1/2 mx-auto" />
+					<Skeleton className="h-6 w-1/3 mx-auto" />
+					<Skeleton className="h-6 w-2/3 mx-auto" />
+				</div>
+			</div>
+		);
+	}
+
 	if (!card) {
 		return <p className="text-center text-red-500">Card not found</p>;
 	}
 
 	return (
-		<div>
-			{card.companyLogo && (
-				<div className="flex justify-center items-center">
+		<div className="z-0">
+			<div className="flex flex-col gap-6">
+				{card.companyLogo && (
 					<Image
 						src={
 							typeof card.companyLogo === "string"
@@ -26,13 +69,11 @@ export default function CardPage({
 								: URL.createObjectURL(card.companyLogo)
 						}
 						alt="Company Logo"
-						width={100}
-						height={100}
-						className="rounded-full mb-4"
+						width={500}
+						height={500}
+						className="aspect-square object-cover z-0"
 					/>
-				</div>
-			)}
-			<div className="flex flex-col gap-6">
+				)}
 				<div className="flex flex-col gap-1">
 					{card.companyPosition && (
 						<p className="text-gray-600">{card.companyPosition}</p>
@@ -90,6 +131,20 @@ export default function CardPage({
 							<LinkedinIcon size={24} />
 						</Button>
 					)}
+				</div>
+				<div className="flex gap-4">
+					<Button variant="flat" color="primary" onClick={handleBookmark}>
+						<BookmarkIcon size={20} />
+						Save to bookmarks
+					</Button>
+					<Button
+						variant="flat"
+						color="secondary"
+						isIconOnly
+						onClick={() => window.print()}
+					>
+						Print
+					</Button>
 				</div>
 			</div>
 		</div>

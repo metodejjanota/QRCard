@@ -76,9 +76,7 @@ export default function PrivatePage({
 						logo={{
 							src: "/logo.png",
 							options: {
-								width: 50,
-								x: 25,
-								y: 275,
+								width: 55,
 							},
 						}}
 					/>

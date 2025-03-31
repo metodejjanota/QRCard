@@ -108,7 +108,7 @@ export default function CardPage({
 						<Button
 							className="bg-blue-400 text-white"
 							isIconOnly
-							onClick={() => window.open(card.facebook, "_blank")}
+							onClick={() => window.open("https://facebook.com/" + card.facebook, "_blank")}
 						>
 							<FacebookIcon size={24} />
 						</Button>
@@ -117,7 +117,7 @@ export default function CardPage({
 						<Button
 							className="bg-orange-700 text-white"
 							isIconOnly
-							onClick={() => window.open(card.instagram, "_blank")}
+							onClick={() => window.open("https://instagram.com/" + card.instagram, "_blank")}
 						>
 							<InstagramIcon size={24} />
 						</Button>
@@ -126,7 +126,7 @@ export default function CardPage({
 						<Button
 							className="bg-blue-900 text-white"
 							isIconOnly
-							onClick={() => window.open(card.linkedin, "_blank")}
+							onClick={() => window.open("https://www.linkedin.com/in/" + card.linkedin, "_blank")}
 						>
 							<LinkedinIcon size={24} />
 						</Button>

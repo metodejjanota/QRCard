@@ -1,24 +1,17 @@
-import { LogOutIcon } from "lucide-react";
-import { createClient } from "@/lib/supabase/component";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { LibraryBigIcon, EditIcon, HouseIcon } from "lucide-react";
+import {
+	LibraryBigIcon,
+	SettingsIcon,
+	HouseIcon,
+	LogInIcon,
+} from "lucide-react";
 import { Button } from "@heroui/react";
 import Image from "next/image";
 
 const NavTop = () => {
 	const router = useRouter();
 	const [siteName, setSiteName] = useState("QRCard");
-
-	async function logout() {
-		const supabase = createClient();
-		const { error } = await supabase.auth.signOut();
-		if (error) {
-			console.error(error);
-			return;
-		}
-		router.push("/auth");
-	}
 
 	useEffect(() => {
 		function updateSiteName() {
@@ -29,6 +22,8 @@ const NavTop = () => {
 				setSiteName("Dashboard");
 			} else if (pathname === "/protected/edit-card") {
 				setSiteName("Edit Card");
+			} else if (pathname === "/protected/user/settings") {
+				setSiteName("Settings");
 			} else {
 				setSiteName("QRCard");
 			}
@@ -51,9 +46,6 @@ const NavTop = () => {
 							/>
 							<h1 className="text-2xl font-bold">{siteName}</h1>
 						</div>
-						<Button isIconOnly variant="solid" onClick={() => logout()}>
-							<LogOutIcon size={24} strokeWidth={2} />
-						</Button>
 					</div>
 				</div>
 			</div>
@@ -66,35 +58,37 @@ const NavBottom = () => {
 
 	return (
 		<div className="fixed left-0 bottom-0 w-full flex justify-around items-center z-10 bg-background border-t">
-			<div className="p-4 mx-6 w-full flex flex-row justify-evenly">
-				<Button
-					variant={`${
-						router.pathname === "/protected/bookmarks" ? "solid" : "light"
-					}`}
-					onClick={() => router.push("/protected/bookmarks")}
-					isIconOnly
-				>
-					<LibraryBigIcon size={24} strokeWidth={2} />
-				</Button>
-				<Button
-					variant={`${
-						router.pathname === "/protected/dashboard" ? "solid" : "light"
-					}`}
-					onClick={() => router.push("/protected/dashboard")}
-					isIconOnly
-				>
-					<HouseIcon size={24} strokeWidth={2} />
-				</Button>
+			<div className="w-full max-w-md mx-auto h-full">
+				<div className="p-4 mx-6 w-full flex flex-row justify-evenly">
+					<Button
+						variant={`${
+							router.pathname === "/protected/bookmarks" ? "solid" : "light"
+						}`}
+						onClick={() => router.push("/protected/bookmarks")}
+						isIconOnly
+					>
+						<LibraryBigIcon size={24} strokeWidth={2} />
+					</Button>
+					<Button
+						variant={`${
+							router.pathname === "/protected/dashboard" ? "solid" : "light"
+						}`}
+						onClick={() => router.push("/protected/dashboard")}
+						isIconOnly
+					>
+						<HouseIcon size={24} strokeWidth={2} />
+					</Button>
 
-				<Button
-					variant={`${
-						router.pathname === "/protected/edit-card" ? "solid" : "light"
-					}`}
-					onClick={() => router.push("/protected/edit-card")}
-					isIconOnly
-				>
-					<EditIcon size={24} strokeWidth={2} />
-				</Button>
+					<Button
+						variant={`${
+							router.pathname === "/protected/user/settings" ? "solid" : "light"
+						}`}
+						onClick={() => router.push("/protected/user/settings")}
+						isIconOnly
+					>
+						<SettingsIcon size={24} strokeWidth={2} />
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

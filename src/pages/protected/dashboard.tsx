@@ -5,6 +5,8 @@ import { useQRCode } from "next-qrcode";
 import { useState, useEffect, useRef } from "react";
 import { Share } from "@capacitor/share";
 import { ICard } from "@/lib/types/card";
+import { Button } from "@heroui/react";
+import { CheckCircleIcon, ShareIcon } from "lucide-react";
 
 export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 	const { Canvas } = useQRCode();
@@ -39,17 +41,6 @@ export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 		}
 	}
 
-	const handleDownloadQrCode = async () => {
-		if (qrDataUrl) {
-			const link = document.createElement("a");
-			link.href = qrDataUrl;
-			link.download = "qr-code.png";
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-		}
-	};
-
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
 			<div className="w-full h-full flex justify-center items-center aspect-square rounded-2xl">
@@ -82,41 +73,26 @@ export default function Dashboard({ user, card }: { user: User; card: ICard }) {
 						Welcome to your private page. You are logged in.
 					</p>
 				</div>
-				<div className="flex flex-col gap-2">
-					<p className="text-sm opacity-70">
-						To share your QRCard,{" "}
-						<span
-							onClick={() => {
-								share();
-							}}
-							className="text-accent cursor-pointer"
-							style={{ textDecoration: "underline" }}
-						>
-							click here
-						</span>
-					</p>
-					<p className="text-sm opacity-70">
-						You can check your card{" "}
-						<span
-							onClick={() => {
-								window.location.href = "/card/" + card.id;
-							}}
-							className="text-accent cursor-pointer"
-							style={{ textDecoration: "underline" }}
-						>
-							here
-						</span>
-					</p>
-					<p className="text-sm opacity-70">
-						You can download your QRCard{" "}
-						<span
-							onClick={handleDownloadQrCode}
-							className="text-accent cursor-pointer"
-							style={{ textDecoration: "underline" }}
-						>
-							here
-						</span>
-					</p>
+				<div className="flex gap-2">
+					<Button
+						variant="solid"
+						onClick={() => {
+							window.location.href = "/card/" + card.id;
+						}}
+						className="w-full h-12"
+					>
+						<CheckCircleIcon size={20} strokeWidth={2} />
+						Check Card
+					</Button>
+					<Button
+						variant="solid"
+						color="primary"
+						onClick={share}
+						className="w-full h-12"
+					>
+						<ShareIcon size={20} strokeWidth={2} />
+						Share Card
+					</Button>
 				</div>
 			</div>
 		</div>

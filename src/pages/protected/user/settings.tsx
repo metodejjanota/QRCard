@@ -1,12 +1,8 @@
 import { Button, Divider } from "@heroui/react";
 import { EditIcon, LogOutIcon } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-import type { NextPageContext } from "next";
 import { createClient } from "@/lib/supabase/server-props";
 
-import { ICard } from "@/lib/types/card";
-
-export default function Settings({ user, card }: { user: User; card: ICard }) {
+export default function Settings() {
 	const handleLogout = async () => {
 		const supabase = createClient();
 		const { error } = await supabase.auth.signOut();
@@ -49,56 +45,3 @@ export default function Settings({ user, card }: { user: User; card: ICard }) {
 		</div>
 	);
 }
-
-Settings.getInitialProps = async (context: NextPageContext) => {
-	const supabase = createClient(context);
-
-	const { data: userData, error: userError } = await supabase.auth.getUser();
-	if (userError || !userData) {
-		if (context.res) {
-			context.res.writeHead(302, { Location: "/" });
-			context.res.end();
-		} else {
-			document.location.pathname = "/";
-		}
-		return { user: null };
-	}
-
-	const user = userData.user;
-
-	const { data: cardData, error: cardError } = await supabase
-		.from("cards")
-		.select("*")
-		.eq("user_id", user.id)
-		.single();
-
-	if (cardError || !cardData) {
-		const { data: newCard, error: createError } = await supabase
-			.from("cards")
-			.insert([
-				{
-					user_id: user.id,
-					email: user.email,
-				},
-			])
-			.select()
-			.single();
-
-		if (createError) {
-			console.error("Error creating card:", createError);
-			return {
-				user,
-			};
-		}
-
-		return {
-			user,
-			card: newCard,
-		};
-	}
-
-	return {
-		user,
-		card: cardData,
-	};
-};
